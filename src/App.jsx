@@ -148,6 +148,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/product" element={<ProductPage />} />
           <Route path="/search" element={<SearchPage />} />
         </Routes>

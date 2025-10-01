@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
+import { messagesAPI } from '../services/api';
 
 const ContactPage = () => {
   useEffect(() => {
-    // Form handler
     const form = document.querySelector('form');
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault();
       const formData = new FormData(form);
       const data = Object.fromEntries(formData);
@@ -12,12 +12,18 @@ const ContactPage = () => {
       const originalText = submitButton.textContent;
       submitButton.textContent = 'Sending...';
       submitButton.disabled = true;
-      setTimeout(() => {
+
+      try {
+        await messagesAPI.create(data);
         alert('Thank you for your message! We will get back to you soon.');
         form.reset();
+      } catch (error) {
+        alert('Failed to send message. Please try again.');
+        console.error('Failed to send message:', error);
+      } finally {
         submitButton.textContent = originalText;
         submitButton.disabled = false;
-      }, 1500);
+      }
     };
 
     if (form) {
