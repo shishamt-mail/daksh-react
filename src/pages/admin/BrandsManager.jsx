@@ -20,10 +20,19 @@ const BrandsManager = () => {
   const fetchBrands = async () => {
     try {
       const auth = localStorage.getItem('admin_auth');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/brands/all`, {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      console.log('VITE_API_URL:', apiUrl);
+      console.log('Fetching from:', `${apiUrl}/brands/all`);
+
+      const response = await fetch(`${apiUrl}/brands/all`, {
         headers: { 'Authorization': `Basic ${auth}` }
       });
+
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+
       const data = await response.json();
+      console.log('Fetched brands:', data);
       setBrands(data.sort((a, b) => a.order - b.order));
       setLoading(false);
     } catch (error) {
@@ -55,9 +64,15 @@ const BrandsManager = () => {
     const auth = localStorage.getItem('admin_auth');
 
     try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      console.log('VITE_API_URL in submit:', apiUrl);
+
       const url = editingBrand
-        ? `${import.meta.env.VITE_API_URL}/brands/${editingBrand._id}`
-        : `${import.meta.env.VITE_API_URL}/brands`;
+        ? `${apiUrl}/brands/${editingBrand._id}`
+        : `${apiUrl}/brands`;
+
+      console.log('Submitting to URL:', url);
+      console.log('Form data:', formData);
 
       const response = await fetch(url, {
         method: editingBrand ? 'PUT' : 'POST',
@@ -70,6 +85,8 @@ const BrandsManager = () => {
           order: parseInt(formData.order)
         })
       });
+
+      console.log('Submit response status:', response.status);
 
       if (response.ok) {
         alert(editingBrand ? 'Brand updated successfully!' : 'Brand created successfully!');
